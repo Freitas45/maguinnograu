@@ -21,6 +21,7 @@ void AbreArquivo(matriz mapa[1]);
 void printaMapa(matriz mapa[1],jogadores magos[2]);
 void LocaisMagos(matriz mapa[1],jogadores magos[2]);
 void identificaPosInicial(matriz mapa[1],jogadores magos[2]);
+void confereFora(matriz)
 
 int main(int argc, char** argv){
     matriz mapa[1];
@@ -46,14 +47,6 @@ void AbreArquivo(matriz mapa[1]){
     }
 }
 
-
-
-|----------
-|
-|
-|
-|
---------
 void LeArquivo(matriz mapa[1],FILE* entrada){
     int i, k;
     fscanf(entrada,"%d %d\n",&mapa[0].linhas,&mapa[0].colunas);
