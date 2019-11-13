@@ -21,7 +21,8 @@ void AbreArquivo(matriz mapa[1]);
 void printaMapa(matriz mapa[1],jogadores magos[2]);
 void LocaisMagos(matriz mapa[1],jogadores magos[2]);
 void identificaPosInicial(matriz mapa[1],jogadores magos[2]);
-void confereFora(matriz)
+void confereFora(matriz mapa[1],jogadores magos[2]);
+
 
 int main(int argc, char** argv){
     matriz mapa[1];
@@ -100,5 +101,11 @@ void identificaPosInicial(matriz mapa[1],jogadores magos[2]){
                 magos[0].colAtual = k;
             }
         }
+    }
+}
+
+void confereForaMovimentos(matriz mapa[1],jogadores magos[2]){
+    if(jordana > matriz[0].linhas){
+        
     }
 }
