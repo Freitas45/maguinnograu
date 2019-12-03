@@ -60,7 +60,82 @@ void parouErrado(matriz mapa[1],jogadores magos[2],int i);
 //como tambem verifica as possibilidades do masgos ganharem por terminarem a rodada em cima de sua reliquia. 
 void encuralado(matriz mapa[1],jogadores magos[2],int i);
 //A funcao verifica a posicao do mago,e em um caso onde ele se encontra incapacitado de fazer movimentos, ele perde. 
+void tempo(matriz mapa[1],jogadores magos[2],int i){
+    FILE *saida;
+    saida = fopen("saida.txt","a");
+    int l,k;
+    for(l = 0; l < mapa[0].linhas;l++){
+        for(k = 0; k < mapa[0].colunas;k++){
+            fprintf(saida,"%c",mapa[0].matriz[l][k]);
+        }
+        fprintf(saida,"\n");
+    }
+    fprintf(saida,"\n");
+    fprintf(saida,"Jogador da vez: %c\n",magos[i].tipo);
+    if(magos[1].pos !='.' && magos[1].pos !='f'){
+    fprintf(saida,"%c: %c\n",magos[1].tipo,magos[1].pos );
+    }else{
+        fprintf(saida,"%c: .\n",magos[1].tipo);
+    }
+    if(magos[0].pos != '.' && magos[0].pos !='a'){
+    fprintf(saida,"%c: %c\n",magos[0].tipo,magos[0].pos );
+    }else{
+        fprintf(saida,"%c: .\n",magos[0].tipo);
+    }
+    fprintf(saida,"Vida %c: %d\n",magos[1].tipo,magos[1].vida);
+    fprintf(saida,"Vida %c: %d\n",magos[0].tipo,magos[0].vida);
 
+    fprintf(saida,"\nComando:\n\n\n");
+    fclose(saida);
+}
+void Ocomando(char comando[],int mov){
+    FILE *comandos;
+    comandos = fopen("comandos.txt","a");
+    int qnt = 0;
+    qnt = mov;
+    if(qnt == 0){
+        fprintf(comandos,"%s\n",comando);
+    }else{
+        fprintf(comandos,"%s %d\n",comando,qnt);
+    }
+    fclose(comandos);
+}
+
+void saida(matriz mapa[1],jogadores magos[2],int i,char comando[],int mov){
+    FILE *all;
+    all = fopen("all.txt","a");
+    int l,k;
+    for(l = 0; l < mapa[0].linhas;l++){
+        for(k = 0; k < mapa[0].colunas;k++){
+            fprintf(all,"%c",mapa[0].matriz[l][k]);
+        }
+        fprintf(all,"\n");
+    }
+    fprintf(all,"\n");
+    fprintf(all,"Jogador da vez: %c\n",magos[i].tipo);
+    if(magos[1].pos !='.' && magos[1].pos !='f'){
+    fprintf(all,"%c: %c\n",magos[1].tipo,magos[1].pos );
+    }else{
+        fprintf(all,"%c: .\n",magos[1].tipo);
+    }
+    if(magos[0].pos != '.' && magos[0].pos !='a'){
+    fprintf(all,"%c: %c\n",magos[0].tipo,magos[0].pos );
+    }else{
+        fprintf(all,"%c: .\n",magos[0].tipo);
+    }
+    fprintf(all,"Vida %c: %d\n",magos[1].tipo,magos[1].vida);
+    fprintf(all,"Vida %c: %d\n",magos[0].tipo,magos[0].vida);
+
+    fprintf(all,"\nComando: ");
+    int qnt = 0;
+    qnt = mov;
+    if(qnt == 0){
+        fprintf(all,"%s\n\n\n",comando);
+    }else{
+        fprintf(all,"%s %d\n\n\n",comando,qnt);
+    }
+    fclose(all);
+}
 
 
 int main(int argc, char** argv){
@@ -140,35 +215,40 @@ int LocaisMagos(matriz mapa[1],jogadores magos[2],int i){
     scanf("%s[^' ']",comando);
     k = strcmp(comando,"ataque");
     if(k == 0){
-        (comando,mov);
+        Ocomando(comando,mov);
+        saida(mapa,magos,i,comando,mov);
         ataque(mapa,magos,i);
         return 0;
     }
     k = strcmp(comando,"direita");
     if(k == 0){
         scanf("%d",&mov);
-        (comando,mov);
+        saida(mapa,magos,i,comando,mov);
+        Ocomando(comando,mov);
         direita(mapa,magos,i,mov);
         return 0;
     }
     k = strcmp(comando,"esquerda");
     if(k == 0){
         scanf("%d",&mov);
-        (comando,mov);
+        Ocomando(comando,mov);
+        saida(mapa,magos,i,comando,mov);
         esquerda(mapa,magos,i,mov);
         return 0;
     }
     k = strcmp(comando,"frente");
     if(k == 0){
         scanf("%d",&mov);
-        (comando,mov);
+        Ocomando(comando,mov);
+        saida(mapa,magos,i,comando,mov);
         frente(mapa,magos,i,mov);
         return 0;
     }
     k = strcmp(comando,"tras");
     if(k == 0){
         scanf("%d",&mov);
-        (comando,mov);
+        Ocomando(comando,mov);
+        saida(mapa,magos,i,comando,mov);
         tras(mapa,magos,i,mov);
         return 0;
     }
@@ -292,6 +372,7 @@ void jogando(matriz mapa[1],jogadores magos[2]){
     int i = 1, k = 0;
     int acabou = 0;
     while(acabou != 1){
+        tempo(mapa,magos,i);
         acabou = LocaisMagos(mapa,magos,i);
         k++;
         if(acabou == 3){
@@ -326,8 +407,8 @@ void apagaFogo(matriz mapa[1],jogadores magos[2],int i, int linha,int coluna){
 void queimaAgua(matriz mapa[1],jogadores magos[2],int i,int linha,int coluna){
     if(mapa[0].matriz[linha][coluna] == 'a'){
                 magos[0].vida -= 10;
-                if(magos[1].pos == 'A'){
-                    magos[1].pos = '.';
+                if(magos[0].pos == 'A'){
+                    magos[0].pos = '.';
                 }
             }
             if(mapa[0].matriz[linha][coluna]=='A'){
